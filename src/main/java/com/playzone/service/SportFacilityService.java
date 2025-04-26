@@ -26,7 +26,7 @@ public class SportFacilityService {
         return facilityRepository.findAll();
     }
 
-    public SportFacility getById(Integer id) {
+    public SportFacility getById(Long id) {
         return facilityRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Локация не найдена по id: " + id));
     }
@@ -52,7 +52,7 @@ public class SportFacilityService {
     }
 
     @Transactional
-    public SportFacility update(Integer id, SportFacilityRequest request) {
+    public SportFacility update(Long id, SportFacilityRequest request) {
         SportFacility facility = getById(id);
         facility.setName(request.getName());
         facility.setAddress(request.getAddress());
@@ -66,7 +66,7 @@ public class SportFacilityService {
     }
 
     @Transactional
-    public void delete(Integer id) {
+    public void delete(Long id) {
         facilityRepository.deleteById(id);
     }
 }

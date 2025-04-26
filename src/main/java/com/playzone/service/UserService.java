@@ -92,7 +92,7 @@ public class UserService implements UserDetailsService {
         return userRepository.findAll();
     }
 
-    public User getUserById(int userId) {
+    public User getUserById(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("Пользователь не найден по id: " + userId));
     }
@@ -104,7 +104,7 @@ public class UserService implements UserDetailsService {
     }
 
 
-    public Optional<User> findById(int userId) {
+    public Optional<User> findById(Long userId) {
         return userRepository.findById(userId);
     }
 
@@ -117,7 +117,7 @@ public class UserService implements UserDetailsService {
             }
             User user = userRepository.findByUsername(username)
                     .orElseThrow(() -> new IllegalArgumentException("Пользователь не найден"));
-            int userId = user.getUsers_id();
+            Long userId = user.getId();
             String originalFilename = file.getOriginalFilename();
             String fileExtension = getFileExtension(originalFilename);
             String objectName = "user_avatars/user_" + userId + "_avatar." + fileExtension;

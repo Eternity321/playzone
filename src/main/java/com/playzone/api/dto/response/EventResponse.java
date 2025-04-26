@@ -12,7 +12,7 @@ import java.time.LocalTime;
 
 @Data
 public class EventResponse {
-    private Integer event_id;
+    private Long id;
     private String title;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
     @JsonSerialize(using = ToStringSerializer.class)
@@ -25,6 +25,6 @@ public class EventResponse {
     private LocalDate eventDate;
     private String sportTypeName;
     private String createdBy;
-    private Integer facilityId;
+    private Long facilityId;
     private Event.EventStatus status;
 }

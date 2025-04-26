@@ -19,7 +19,7 @@ public class SportTypeService {
         return repository.findAll();
     }
 
-    public SportType getById(Integer id) {
+    public SportType getById(Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Тип спорта не найден: " + id));
     }
@@ -33,14 +33,14 @@ public class SportTypeService {
     }
 
     @Transactional
-    public SportType update(Integer id, SportTypeRequest request) {
+    public SportType update(Long id, SportTypeRequest request) {
         SportType existing = getById(id);
         existing.setName(request.getName());
         return repository.save(existing);
     }
 
     @Transactional
-    public void delete(Integer id) {
+    public void delete(Long id) {
         repository.deleteById(id);
     }
 }

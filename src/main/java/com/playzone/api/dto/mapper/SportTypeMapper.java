@@ -16,7 +16,7 @@ public class SportTypeMapper {
 
     public SportTypeResponse toResponse(SportType sportType) {
         SportTypeResponse response = new SportTypeResponse();
-        response.setSport_type_id(sportType.getSport_type_id());
+        response.setId(sportType.getId());
         response.setName(sportType.getName());
         return response;
     }

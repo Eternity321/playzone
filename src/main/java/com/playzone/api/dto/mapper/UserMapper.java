@@ -19,7 +19,7 @@ public class UserMapper {
 
     public UserResponse toResponse(User user) {
         UserResponse response = new UserResponse();
-        response.setUsers_id(user.getUsers_id());
+        response.setId(user.getId());
         response.setNickname(user.getNickname());
         response.setAvatarKey(user.getUserAvatarKey());
         response.setUsername(user.getUsername());

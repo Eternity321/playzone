@@ -28,7 +28,7 @@ public class EventController {
 
     @Operation(summary = "Событие по ID")
     @GetMapping("/{id}")
-    public ResponseEntity<EventResponse> getById(@PathVariable Integer id) {
+    public ResponseEntity<EventResponse> getById(@PathVariable Long id) {
         return ResponseEntity.ok(mapper.toResponse(service.getById(id)));
     }
 
@@ -42,14 +42,14 @@ public class EventController {
     @Operation(summary = "Обновление события (USER)")
     @Secured("ROLE_USER")
     @PutMapping("/{id}")
-    public ResponseEntity<EventResponse> update(@PathVariable Integer id, @RequestBody EventRequest request) {
+    public ResponseEntity<EventResponse> update(@PathVariable Long id, @RequestBody EventRequest request) {
         return ResponseEntity.ok(mapper.toResponse(service.update(id, request)));
     }
 
     @Operation(summary = "Удаление события (ADMIN)")
     @Secured("ROLE_ADMIN")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Integer id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }

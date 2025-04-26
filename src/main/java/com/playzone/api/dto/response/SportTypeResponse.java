@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class SportTypeResponse {
-    private Integer sport_type_id;
+    private Long id;
     private String name;
 }

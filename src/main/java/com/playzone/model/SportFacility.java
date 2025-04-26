@@ -16,7 +16,8 @@ public class SportFacility {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer sport_facility_id;
+    @Column(name = "sport_facility_id")
+    private Long id;
 
     @Column(nullable = false, length = 255)
     private String name;

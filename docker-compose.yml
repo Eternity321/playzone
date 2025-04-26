@@ -63,7 +63,6 @@ services:
       SPRING_MINIO_PASSWORD: ${SPRING_MINIO_PASSWORD}
     env_file:
       - .env
-    command: ["sh", "-c", "printenv && exec java -jar app.jar"]
     ports:
       - "8081:8081"
     depends_on:

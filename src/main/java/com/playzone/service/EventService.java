@@ -20,12 +20,13 @@ public class EventService {
 
     private final EventRepository repository;
     private final EventMapper mapper;
+    private final EventParticipantService eventParticipantService;
 
     public List<Event> getAll() {
         return repository.findAll();
     }
 
-    public Event getById(Integer id) {
+    public Event getById(Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Событие не найдено: " + id));
     }
@@ -37,27 +38,31 @@ public class EventService {
             throw new IllegalArgumentException("Невозможно создать событие, так как его время начала уже прошло.");
         }
         if (request.getEndTime().isBefore(now) || request.getEndTime().isBefore(request.getStartTime())) {
-            throw new IllegalArgumentException("Невозможно создать событие, так как его время зовершения уже прошло или равно времени начала.");
+            throw new IllegalArgumentException("Невозможно создать событие, так как его время завершения уже прошло или оно раньше начала.");
         }
+
         Event event = mapper.toEntity(request);
         event.setStatus(Event.EventStatus.PLANNED);
+        event = repository.save(event);
 
-        return repository.save(event);
+        eventParticipantService.addCreatorAsParticipant(event);
+
+        return event;
     }
 
 
     @Transactional
-    public Event update(Integer id, EventRequest request) {
+    public Event update(Long id, EventRequest request) {
         Event existing = getById(id);
         Event updated = mapper.toEntity(request);
-        updated.setEvent_id(existing.getEvent_id());
+        updated.setId(existing.getId());
         updated.setCreator(existing.getCreator());
         updateEventStatus(updated);
         return repository.save(updated);
     }
 
     @Transactional
-    public void delete(Integer id) {
+    public void delete(Long id) {
         repository.deleteById(id);
     }
 
@@ -94,10 +99,8 @@ public class EventService {
             updateEventStatus(event);
             if (oldStatus != event.getStatus()) {
                 repository.save(event);
-                System.out.println("Обновлен статус события: " + event.getEvent_id() + " на " + event.getStatus());
+                System.out.println("Обновлен статус события: " + event.getId() + " на " + event.getStatus());
             }
         }
     }
-
-
 }

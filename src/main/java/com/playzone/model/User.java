@@ -21,9 +21,9 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "users_id")
-    private int users_id;
+    private Long id;
 
-    @Schema(description = "Nickname пользователя", example = "Vasya2007")
+    @Schema(description = "Nickname пользователя", example = "Власов Антон")
     @Column(name = "nickname")
     private String nickname;
 

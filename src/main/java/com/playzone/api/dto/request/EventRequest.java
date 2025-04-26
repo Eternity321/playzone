@@ -21,5 +21,5 @@ public class EventRequest {
     @Schema(example = "14:00")
     private LocalTime endTime;
     private LocalDate eventDate;
-    private Integer facilityId;
+    private Long facilityId;
 }

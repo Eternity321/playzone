@@ -37,14 +37,14 @@ public class EventMapper {
 
     public EventResponse toResponse(Event event) {
         EventResponse response = new EventResponse();
-        response.setEvent_id(event.getEvent_id());
+        response.setId(event.getId());
         response.setTitle(event.getTitle());
         response.setStartTime(event.getStartTime());
         response.setEndTime(event.getEndTime());
         response.setEventDate(event.getEventDate());
         response.setSportTypeName(event.getSportType().getName());
         response.setCreatedBy(event.getCreator().getNickname());
-        response.setFacilityId(event.getFacility().getSport_facility_id());
+        response.setFacilityId(event.getFacility().getId());
         response.setStatus(event.getStatus());
         return response;
     }

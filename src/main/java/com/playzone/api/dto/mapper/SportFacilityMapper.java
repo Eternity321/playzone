@@ -28,7 +28,7 @@ public class SportFacilityMapper {
 
     public SportFacilityResponse toResponse(SportFacility facility) {
         SportFacilityResponse response = new SportFacilityResponse();
-        response.setSport_facility_id(facility.getSport_facility_id());
+        response.setId(facility.getId());
         response.setName(facility.getName());
         response.setAddress(facility.getAddress());
         response.setLatitude(facility.getLatitude());

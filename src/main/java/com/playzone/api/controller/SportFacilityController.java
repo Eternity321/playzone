@@ -34,7 +34,7 @@ public class SportFacilityController {
 
     @Operation(summary = "Получение локации по ID")
     @GetMapping("/{id}")
-    public ResponseEntity<SportFacilityResponse> getById(@PathVariable Integer id) {
+    public ResponseEntity<SportFacilityResponse> getById(@PathVariable Long id) {
         return ResponseEntity.ok(mapper.toResponse(service.getById(id)));
     }
 
@@ -49,7 +49,7 @@ public class SportFacilityController {
     @Operation(summary = "Обновление локации (USER)")
     @Secured("ROLE_USER")
     @PutMapping("/{id}")
-    public ResponseEntity<SportFacilityResponse> update(@PathVariable Integer id, @RequestBody SportFacilityRequest request) {
+    public ResponseEntity<SportFacilityResponse> update(@PathVariable Long id, @RequestBody SportFacilityRequest request) {
         SportFacility updated = service.update(id, request);
         return ResponseEntity.ok(mapper.toResponse(updated));
     }
@@ -57,7 +57,7 @@ public class SportFacilityController {
     @Operation(summary = "Удаление локации (ADMIN)")
     @Secured("ROLE_ADMIN")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Integer id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }

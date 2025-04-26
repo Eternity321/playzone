@@ -28,7 +28,7 @@ public class SportTypeController {
 
     @Operation(summary = "Получить тип спорта по ID")
     @GetMapping("/{id}")
-    public ResponseEntity<SportTypeResponse> getById(@PathVariable Integer id) {
+    public ResponseEntity<SportTypeResponse> getById(@PathVariable Long id) {
         return ResponseEntity.ok(mapper.toResponse(service.getById(id)));
     }
 
@@ -42,14 +42,14 @@ public class SportTypeController {
     @Operation(summary = "Обновить тип спорта (ADMIN)")
     @Secured("ROLE_ADMIN")
     @PutMapping("/{id}")
-    public ResponseEntity<SportTypeResponse> update(@PathVariable Integer id, @RequestBody SportTypeRequest request) {
+    public ResponseEntity<SportTypeResponse> update(@PathVariable Long id, @RequestBody SportTypeRequest request) {
         return ResponseEntity.ok(mapper.toResponse(service.update(id, request)));
     }
 
     @Operation(summary = "Удалить тип спорта (ADMIN)")
     @Secured("ROLE_ADMIN")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Integer id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }

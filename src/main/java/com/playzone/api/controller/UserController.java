@@ -50,7 +50,7 @@ public class UserController {
     @Operation(summary = "Получение информации о пользователе по его ID (ADMIN)")
     @Secured("ROLE_ADMIN")
     @GetMapping("/{userId}")
-    public ResponseEntity<UserResponse> getUserById(@PathVariable int userId) {
+    public ResponseEntity<UserResponse> getUserById(@PathVariable Long userId) {
         User user = userService.getUserById(userId);
         UserResponse response = userMapper.toResponse(user);
         return ResponseEntity.ok(response);

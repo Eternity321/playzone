@@ -6,7 +6,7 @@ import lombok.Data;
 public class SportFacilityRequest {
     private String name;
     private String address;
-    private Integer sportTypeId;
+    private Long sportTypeId;
     private Double latitude;
     private Double longitude;
     private String description;
