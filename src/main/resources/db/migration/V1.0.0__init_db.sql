@@ -62,7 +62,7 @@ CREATE TABLE event_participant
 
 CREATE TABLE photo
 (
-    photo_id          BIGSERIAL NOT NULL PRIMARY KEY,
+    photo_id          BIGSERIAL    NOT NULL PRIMARY KEY,
     sport_facility_id BIGINT       NOT NULL REFERENCES sport_facility (sport_facility_id) ON DELETE CASCADE,
     file_key          VARCHAR(255) NOT NULL UNIQUE,
     created_at        TIMESTAMP DEFAULT now()
