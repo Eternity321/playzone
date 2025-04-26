@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Schema(description = "Сущность локкации")
 @Data
 @NoArgsConstructor
@@ -42,6 +44,6 @@ public class SportFacility {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-//    @OneToMany(mappedBy = "facility")
-//    private List<Photo> photos;
+    @OneToMany(mappedBy = "sportFacility", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Photo> photos;
 }

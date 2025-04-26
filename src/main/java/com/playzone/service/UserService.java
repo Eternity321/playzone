@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.google.common.io.Files.getFileExtension;
 
 @Service
 @RequiredArgsConstructor
@@ -113,27 +112,37 @@ public class UserService implements UserDetailsService {
         try {
             String contentType = file.getContentType();
             if (contentType == null || (!contentType.equals("image/jpeg") && !contentType.equals("image/png"))) {
-                throw new IllegalArgumentException("Недопустимый тип файла. Разрешены только файлы JPEG и PNG.");
+                throw new IllegalArgumentException("Недопустимый тип файла. Разрешены только JPEG и PNG.");
             }
+
             User user = userRepository.findByUsername(username)
                     .orElseThrow(() -> new IllegalArgumentException("Пользователь не найден"));
+
             Long userId = user.getId();
-            String originalFilename = file.getOriginalFilename();
-            String fileExtension = getFileExtension(originalFilename);
+            String fileExtension = getFileExtension(file.getOriginalFilename()).toLowerCase();
             String objectName = "user_avatars/user_" + userId + "_avatar." + fileExtension;
-            String previousAvatarKey = user.getUserAvatarKey();
-            if (previousAvatarKey != null) {
-                minioService.deleteFile(previousAvatarKey);
+
+            if (user.getUserAvatarKey() != null) {
+                minioService.deleteFile(user.getUserAvatarKey());
             }
-            InputStream inputStream = file.getInputStream();
-            minioService.uploadFile(objectName, inputStream, contentType);
+
+            try (InputStream inputStream = file.getInputStream()) {
+                minioService.uploadFile(objectName, inputStream, contentType);
+            }
+
             user.setUserAvatarKey(objectName);
             userRepository.save(user);
+
             return objectName;
         } catch (IOException e) {
-            throw new RuntimeException("Не удалось загрузить аватар пользователя", e);
+            throw new RuntimeException("Ошибка при загрузке аватара пользователя", e);
         }
     }
+
+    private String getFileExtension(String filename) {
+        return filename.substring(filename.lastIndexOf('.') + 1);
+    }
+
 
     @Transactional
     public User addAdminRoleToUser(String username) {
