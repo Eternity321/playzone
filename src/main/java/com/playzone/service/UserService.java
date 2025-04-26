@@ -50,6 +50,10 @@ public class UserService implements UserDetailsService {
         return userRepository.findByUsername(username);
     }
 
+    public Optional<User> findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
     @Transactional
     public User updateEmail(String username, String newEmail) {
         User user = userRepository.findByUsername(username)

@@ -45,6 +45,9 @@ public class AuthService {
         if (userService.findByUsername(registrationUserRequest.getUsername()).isPresent()) {
             return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), "Пользователь с указанным именем уже существует"), HttpStatus.BAD_REQUEST);
         }
+        if (userService.findByEmail(registrationUserRequest.getEmail()).isPresent()) {
+            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), "Пользователь с таким email уже существует"), HttpStatus.BAD_REQUEST);
+        }
         User newUser = userService.createNewUser(registrationUserRequest);
         UserResponse userResponse = new UserResponse(newUser.getId(), newUser.getUsername(), null, newUser.getEmail(), newUser.getNickname());
         return ResponseEntity.ok(userResponse);

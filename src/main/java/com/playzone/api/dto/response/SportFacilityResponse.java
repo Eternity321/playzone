@@ -11,5 +11,6 @@ public class SportFacilityResponse {
     private Double latitude;
     private Double longitude;
     private String description;
+    private Double averageRating;
     private String createdByNickname;
 }

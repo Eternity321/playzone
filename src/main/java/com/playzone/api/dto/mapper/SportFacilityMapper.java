@@ -4,6 +4,7 @@ import com.playzone.api.dto.request.SportFacilityRequest;
 import com.playzone.api.dto.response.SportFacilityResponse;
 import com.playzone.model.SportFacility;
 import com.playzone.repository.SportTypeRepository;
+import com.playzone.service.FacilityCommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -12,6 +13,8 @@ public class SportFacilityMapper {
 
     @Autowired
     private SportTypeRepository sportTypeRepository;
+    @Autowired
+    private FacilityCommentService facilityCommentService;
 
     public SportFacility toEntity(SportFacilityRequest request) {
         SportFacility facility = new SportFacility();
@@ -36,6 +39,8 @@ public class SportFacilityMapper {
         response.setDescription(facility.getDescription());
         response.setCreatedByNickname(facility.getCreatedBy().getNickname());
         response.setSportTypeName(facility.getSportType().getName());
+        Double avgRating = facilityCommentService.getAverageRating(facility.getId());
+        response.setAverageRating(avgRating);
         return response;
     }
 

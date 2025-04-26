@@ -24,7 +24,7 @@ public class EventResponse {
     private LocalTime endTime;
     private LocalDate eventDate;
     private String sportTypeName;
-    private String createdBy;
     private Long facilityId;
     private Event.EventStatus status;
+    private String createdBy;
 }

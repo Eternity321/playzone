@@ -63,7 +63,18 @@ CREATE TABLE event_participant
 CREATE TABLE photo
 (
     photo_id          BIGSERIAL    NOT NULL PRIMARY KEY,
-    sport_facility_id BIGINT       NOT NULL REFERENCES sport_facility (sport_facility_id) ON DELETE CASCADE,
     file_key          VARCHAR(255) NOT NULL UNIQUE,
-    created_at        TIMESTAMP DEFAULT now()
+    created_at        TIMESTAMP DEFAULT now(),
+    sport_facility_id BIGINT       NOT NULL REFERENCES sport_facility (sport_facility_id) ON DELETE CASCADE
+);
+
+CREATE TABLE facility_comment
+(
+    facility_comment_id BIGSERIAL NOT NULL PRIMARY KEY,
+    rating              INTEGER   NOT NULL CHECK (rating >= 1 AND rating <= 5),
+    created_at          TIMESTAMP DEFAULT now(),
+    text                TEXT,
+    user_id             BIGINT    NOT NULL REFERENCES users (users_id) ON DELETE CASCADE,
+    facility_id         BIGINT    NOT NULL REFERENCES sport_facility (sport_facility_id) ON DELETE CASCADE,
+    UNIQUE (user_id, facility_id)
 );
