@@ -72,4 +72,12 @@ public class SportFacilityController {
         List<String> photoUrls = sportFacilityService.uploadFacilityPhotos(facilityId, files);
         return ResponseEntity.ok(photoUrls);
     }
+
+    @Operation(summary = "Удалить фото спортивного объекта (USER)")
+    @Secured("ROLE_USER")
+    @DeleteMapping("/{facilityId}/photos/{photoId}")
+    public ResponseEntity<Void> deleteFacilityPhoto(@PathVariable Long facilityId, @PathVariable Long photoId) {
+        sportFacilityService.deleteFacilityPhoto(facilityId, photoId);
+        return ResponseEntity.noContent().build();
+    }
 }
