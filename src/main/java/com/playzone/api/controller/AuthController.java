@@ -4,6 +4,7 @@ import com.playzone.api.dto.request.JwtRequest;
 import com.playzone.api.dto.request.RegistrationUserRequest;
 import com.playzone.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,7 +25,7 @@ public class AuthController {
 
     @Operation(summary = "Зарегистрироваться")
     @PostMapping("/registration")
-    public ResponseEntity<?> createNewUser(@RequestBody RegistrationUserRequest registrationUserRequest) {
-        return authService.createNewrUser(registrationUserRequest);
+    public ResponseEntity<?> createNewUser(@RequestBody @Valid RegistrationUserRequest registrationUserRequest) {
+        return authService.createNewUser(registrationUserRequest);
     }
 }

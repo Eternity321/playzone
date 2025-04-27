@@ -22,4 +22,6 @@ public class RoleService {
     public Role getAdminRole() {
         return roleRepository.findByName("ROLE_ADMIN").get();
     }
+
+    public Role getBannedRole() { return roleRepository.findByName("ROLE_BANNED").get(); }
 }

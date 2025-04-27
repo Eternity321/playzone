@@ -79,12 +79,16 @@ public class UserController {
     @Operation(summary = "Смена пароля пользователя (USER)")
     @Secured("ROLE_USER")
     @PutMapping("/password")
-    public ResponseEntity<UserResponse> updatePassword(@RequestParam String newPassword) {
+    public ResponseEntity<UserResponse> updatePassword(@RequestParam String currentPassword,
+                                                       @RequestParam String newPassword) {
         String username = authService.getCurrentUsername();
-        User updated = userService.updatePassword(username, newPassword);
-        UserResponse response = userMapper.toResponse(updated);
+        userService.changePassword(username, currentPassword, newPassword);
+        User user = userService.getUserProfile(username);
+        UserResponse response = userMapper.toResponse(user);
         return ResponseEntity.ok(response);
     }
+
+
 
     @Operation(summary = "Добавить аватар пользователя (USER)")
     @Secured("ROLE_USER")
@@ -101,5 +105,37 @@ public class UserController {
     public ResponseEntity<UserResponse> addAdminRoleToUser(@RequestParam String username) {
         userService.addAdminRoleToUser(username);
         return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "Убрать роль администратора пользователю (ADMIN)")
+    @Secured("ROLE_ADMIN")
+    @PostMapping("/{username}/remove-admin")
+    public ResponseEntity<String> removeAdminRole(@PathVariable String username) {
+        userService.removeAdminRole(username);
+        return ResponseEntity.ok("У пользователя " + username + " снята роль администратора");
+    }
+
+    @Operation(summary = "Заблокировать пользователя (ADMIN)")
+    @Secured("ROLE_ADMIN")
+    @PostMapping("/{username}/ban")
+    public ResponseEntity<String> banUser(@PathVariable String username) {
+        userService.banUser(username);
+        return ResponseEntity.ok("Пользователь " + username + " забанен");
+    }
+
+    @Operation(summary = "Разблокировать пользователя (ADMIN)")
+    @Secured("ROLE_ADMIN")
+    @PostMapping("/{username}/unban")
+    public ResponseEntity<String> unbanUser(@PathVariable String username) {
+        userService.unbanUser(username);
+        return ResponseEntity.ok("Пользователь " + username + " разбанен");
+    }
+
+    @Operation(summary = "Получить всех пользователей по роли (ADMIN)")
+    @Secured("ROLE_ADMIN")
+    @GetMapping("/role/{roleName}")
+    public ResponseEntity<List<User>> getUsersByRole(@PathVariable String roleName) {
+        List<User> users = userService.getUsersByRole(roleName);
+        return ResponseEntity.ok(users);
     }
 }

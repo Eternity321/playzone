@@ -28,6 +28,7 @@ public class SportFacilityService {
     private final AuthService authService;
     private final MinioService minioService;
     private final PhotoRepository photoRepository;
+    private final SportFacilityRepository sportFacilityRepository;
     @Autowired
     private SportTypeRepository sportTypeRepository;
 
@@ -144,5 +145,9 @@ public class SportFacilityService {
 
     private String getFileExtension(String filename) {
         return filename.substring(filename.lastIndexOf('.') + 1);
+    }
+
+    public boolean existsById(Long id) {
+        return sportFacilityRepository.existsById(id);
     }
 }

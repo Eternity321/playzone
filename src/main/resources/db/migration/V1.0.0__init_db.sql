@@ -78,3 +78,13 @@ CREATE TABLE facility_comment
     facility_id         BIGINT    NOT NULL REFERENCES sport_facility (sport_facility_id) ON DELETE CASCADE,
     UNIQUE (user_id, facility_id)
 );
+
+CREATE TABLE report
+(
+    report_id   BIGSERIAL NOT NULL PRIMARY KEY,
+    reporter_id BIGINT      NOT NULL REFERENCES users (users_id) ON DELETE CASCADE,
+    target_type VARCHAR(20) NOT NULL CHECK (target_type IN ('USER', 'FACILITY', 'COMMENT', 'EVENT')),
+    target_id   BIGINT      NOT NULL,
+    reason TEXT        NOT NULL
+);
+

@@ -20,6 +20,7 @@ public class FacilityCommentService {
     private final SportFacilityRepository facilityRepository;
     private final AuthService authService;
     private final UserService userService;
+    private final FacilityCommentRepository facilityCommentRepository;
 
     @Transactional
     public FacilityComment create(Long facilityId, FacilityCommentRequest request) {
@@ -76,5 +77,9 @@ public class FacilityCommentService {
     public Double getAverageRating(Long facilityId) {
         Double avg = commentRepository.findAverageRatingByFacilityId(facilityId);
         return avg != null ? avg : 0.0;
+    }
+
+    public boolean existsById(Long id) {
+        return facilityCommentRepository.existsById(id);
     }
 }

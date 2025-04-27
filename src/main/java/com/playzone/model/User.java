@@ -64,7 +64,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return roles.stream().noneMatch(role -> "ROLE_BANNED".equals(role.getName()));
     }
 
     @Override
@@ -76,4 +76,5 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
 }

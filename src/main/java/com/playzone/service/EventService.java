@@ -21,6 +21,7 @@ public class EventService {
     private final EventRepository repository;
     private final EventMapper mapper;
     private final EventParticipantService eventParticipantService;
+    private final EventRepository eventRepository;
 
     public List<Event> getAll() {
         return repository.findAll();
@@ -102,5 +103,9 @@ public class EventService {
                 System.out.println("Обновлен статус события: " + event.getId() + " на " + event.getStatus());
             }
         }
+    }
+
+    public boolean existsById(Long id) {
+        return eventRepository.existsById(id);
     }
 }

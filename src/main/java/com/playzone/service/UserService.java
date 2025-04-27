@@ -46,6 +46,19 @@ public class UserService implements UserDetailsService {
         return userRepository.save(user);
     }
 
+    @Transactional
+    public void changePassword(String username, String currentPassword, String newPassword) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("Пользователь не найден"));
+
+        if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
+            throw new IllegalArgumentException("Текущий пароль указан неверно");
+        }
+
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+    }
+
     public Optional<User> findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
@@ -149,11 +162,53 @@ public class UserService implements UserDetailsService {
 
 
     @Transactional
-    public User addAdminRoleToUser(String username) {
+    public void addAdminRoleToUser(String username) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new IllegalArgumentException("Пользователь не найден"));
         Role adminRole = roleService.getAdminRole();
         user.getRoles().add(adminRole);
-        return userRepository.save(user);
+        userRepository.save(user);
+    }
+
+    @Transactional
+    public void removeAdminRole(String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("Пользователь не найден"));
+        Role adminRole = roleService.getAdminRole();
+        user.getRoles().removeIf(role -> role.getName().equals(adminRole.getName()));
+        userRepository.save(user);
+    }
+
+    @Transactional
+    public void banUser(String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("Пользователь не найден"));
+
+        Role bannedRole = roleService.getBannedRole();
+
+        user.setRoles(List.of(bannedRole));
+        userRepository.save(user);
+    }
+
+    @Transactional
+    public void unbanUser(String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("Пользователь не найден"));
+
+        Role userRole = roleService.getUserRole();
+        user.setRoles(List.of(userRole));
+        userRepository.save(user);
+    }
+
+    @Transactional(readOnly = true)
+    public List<User> getUsersByRole(String roleName) {
+        return userRepository.findAll().stream()
+                .filter(user -> user.getRoles().stream()
+                        .anyMatch(role -> role.getName().equalsIgnoreCase(roleName)))
+                .toList();
+    }
+
+    public boolean existsById(Long id) {
+        return userRepository.existsById(id);
     }
 }

@@ -26,7 +26,7 @@ public class EventController {
         return ResponseEntity.ok(service.getAll().stream().map(mapper::toResponse).toList());
     }
 
-    @Operation(summary = "Событие по ID")
+    @Operation(summary = "Получить событие по ID")
     @GetMapping("/{id}")
     public ResponseEntity<EventResponse> getById(@PathVariable Long id) {
         return ResponseEntity.ok(mapper.toResponse(service.getById(id)));
