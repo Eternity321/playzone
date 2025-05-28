@@ -34,11 +34,17 @@ public class EventService {
 
     @Transactional
     public Event create(EventRequest request) {
-        LocalTime now = LocalTime.now(ZoneId.of("Europe/Moscow"));
-        if (request.getStartTime().isBefore(now)) {
+        ZoneId zone = ZoneId.of("Europe/Moscow");
+
+        ZonedDateTime now = ZonedDateTime.now(zone);
+        ZonedDateTime startDateTime = ZonedDateTime.of(request.getEventDate(), request.getStartTime(), zone);
+        ZonedDateTime endDateTime = ZonedDateTime.of(request.getEventDate(), request.getEndTime(), zone);
+
+        if (startDateTime.isBefore(now)) {
             throw new IllegalArgumentException("Невозможно создать событие, так как его время начала уже прошло.");
         }
-        if (request.getEndTime().isBefore(now) || request.getEndTime().isBefore(request.getStartTime())) {
+
+        if (endDateTime.isBefore(now) || endDateTime.isBefore(startDateTime)) {
             throw new IllegalArgumentException("Невозможно создать событие, так как его время завершения уже прошло или оно раньше начала.");
         }
 
@@ -50,6 +56,7 @@ public class EventService {
 
         return event;
     }
+
 
 
     @Transactional
