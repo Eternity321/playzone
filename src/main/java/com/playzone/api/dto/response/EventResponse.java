@@ -27,4 +27,5 @@ public class EventResponse {
     private Long facilityId;
     private Event.EventStatus status;
     private String createdBy;
+    private Long creatorId;
 }

@@ -44,6 +44,7 @@ public class EventMapper {
         response.setEventDate(event.getEventDate());
         response.setSportTypeName(event.getSportType().getName());
         response.setCreatedBy(event.getCreator().getNickname());
+        response.setCreatorId(event.getCreator().getId());
         response.setFacilityId(event.getFacility().getId());
         response.setStatus(event.getStatus());
         return response;
