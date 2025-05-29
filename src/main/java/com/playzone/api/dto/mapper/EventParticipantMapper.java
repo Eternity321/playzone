@@ -23,6 +23,7 @@ public class EventParticipantMapper {
         response.setEventId(participant.getEvent().getId());
         response.setUserId(participant.getUser().getId());
         response.setUserNickname(participant.getUser().getNickname());
+        response.setAvatarKey(participant.getUser().getUserAvatarKey());
         return response;
     }
 }

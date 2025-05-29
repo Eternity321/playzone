@@ -8,4 +8,5 @@ public class EventParticipantResponse {
     private Long eventId;
     private Long userId;
     private String userNickname;
+    private String avatarKey;
 }

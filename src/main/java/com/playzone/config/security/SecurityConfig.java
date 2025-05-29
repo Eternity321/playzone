@@ -35,25 +35,38 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .cors(Customizer.withDefaults()) // включает CORS
+                .cors(Customizer.withDefaults())
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        .requestMatchers(HttpMethod.POST,
+                                "/api/v1/auth/registration",
+                                "/api/v1/auth/login"
+                        ).permitAll()
+                        .requestMatchers(HttpMethod.GET,
+                                "/api/v1/sport-types",
+                                "/api/v1/sport-types/{id}",
+                                "/api/v1/facilities",
+                                "/api/v1/facilities/{id}",
+                                "/api/v1/facilities/{facilityId}/comments",
+                                "/api/v1/facilities/{facilityId}/comments/average-rating",
+                                "/api/v1/events",
+                                "/api/v1/events/{id}",
+                                "/api/v1/events/{eventId}/participants"
+                        ).permitAll()
                         .requestMatchers(
-                                "/api/v1/auth/**",
-                                "/api/v1/registration/**",
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
                                 "/swagger-ui.html"
                         ).permitAll()
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .anyRequest().authenticated()
                 )
-
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
+
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
