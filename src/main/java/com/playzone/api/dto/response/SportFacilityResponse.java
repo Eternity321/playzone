@@ -2,6 +2,8 @@ package com.playzone.api.dto.response;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class SportFacilityResponse {
     private Long id;
@@ -13,4 +15,6 @@ public class SportFacilityResponse {
     private String description;
     private Double averageRating;
     private String createdByNickname;
+    private Long createdById;
+    private List<String> photoKeys;
 }

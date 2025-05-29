@@ -80,4 +80,14 @@ public class SportFacilityController {
         sportFacilityService.deleteFacilityPhoto(facilityId, photoId);
         return ResponseEntity.noContent().build();
     }
+
+    @Operation(summary = "Удалить фото спортивного объекта по пути (USER)")
+    @Secured("ROLE_USER")
+    @DeleteMapping("/{facilityId}/photos/by-path")
+    public ResponseEntity<Void> deleteFacilityPhotoByPath(
+            @PathVariable Long facilityId,
+            @RequestParam String path) {
+        sportFacilityService.deleteFacilityPhotoByPath(facilityId, path);
+        return ResponseEntity.noContent().build();
+    }
 }

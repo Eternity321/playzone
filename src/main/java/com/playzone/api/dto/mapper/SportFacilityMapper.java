@@ -2,11 +2,16 @@ package com.playzone.api.dto.mapper;
 
 import com.playzone.api.dto.request.SportFacilityRequest;
 import com.playzone.api.dto.response.SportFacilityResponse;
+import com.playzone.model.Photo;
 import com.playzone.model.SportFacility;
+import com.playzone.repository.PhotoRepository;
 import com.playzone.repository.SportTypeRepository;
 import com.playzone.service.FacilityCommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class SportFacilityMapper {
@@ -15,6 +20,8 @@ public class SportFacilityMapper {
     private SportTypeRepository sportTypeRepository;
     @Autowired
     private FacilityCommentService facilityCommentService;
+    @Autowired
+    private PhotoRepository photoRepository;
 
     public SportFacility toEntity(SportFacilityRequest request) {
         SportFacility facility = new SportFacility();
@@ -38,9 +45,15 @@ public class SportFacilityMapper {
         response.setLongitude(facility.getLongitude());
         response.setDescription(facility.getDescription());
         response.setCreatedByNickname(facility.getCreatedBy().getNickname());
+        response.setCreatedById(facility.getCreatedBy().getId());
         response.setSportTypeName(facility.getSportType().getName());
         Double avgRating = facilityCommentService.getAverageRating(facility.getId());
         response.setAverageRating(avgRating);
+        List<String> photoKeys = photoRepository.findAllBySportFacilityId(facility.getId())
+                .stream()
+                .map(Photo::getFileKey)
+                .collect(Collectors.toList());
+        response.setPhotoKeys(photoKeys);
         return response;
     }
 

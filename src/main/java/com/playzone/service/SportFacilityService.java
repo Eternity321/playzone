@@ -96,17 +96,29 @@ public class SportFacilityService {
         }
 
         List<String> uploadedFileKeys = new ArrayList<>();
-        int startIndex = existingPhotos.size() + 1;
+
+        // Находим максимальный существующий индекс
+        int maxIndex = existingPhotos.stream()
+                .mapToInt(photo -> {
+                    String key = photo.getFileKey();
+                    int start = key.lastIndexOf('_') + 1;
+                    int end = key.lastIndexOf('.');
+                    return Integer.parseInt(key.substring(start, end));
+                })
+                .max()
+                .orElse(0);
 
         for (int i = 0; i < files.size(); i++) {
             MultipartFile file = files.get(i);
             String contentType = file.getContentType();
-            if (contentType == null || (!contentType.equals("image/jpeg") && !contentType.equals("image/png"))) {
-                throw new IllegalArgumentException("Недопустимый тип файла. Только JPEG и PNG.");
+            if (contentType == null || (!contentType.equals("image/jpeg") && !contentType.equals("image/png") && !contentType.equals("image/webp"))) {
+                throw new IllegalArgumentException("Недопустимый тип файла. Только JPEG, PNG и WEBP.");
             }
+
             String originalFilename = file.getOriginalFilename();
             String fileExtension = getFileExtension(originalFilename);
-            String objectName = "facility_photos/facility_photo_" + facilityId + "_" + (startIndex + i) + "." + fileExtension;
+            String objectName = "facility_photos/facility_photo_" + facilityId + "_" + (maxIndex + i + 1) + "." + fileExtension;
+
             try (InputStream inputStream = file.getInputStream()) {
                 minioService.uploadFile(objectName, inputStream, contentType);
                 Photo photo = new Photo();
@@ -133,6 +145,26 @@ public class SportFacilityService {
         }
 
         Photo photo = photoRepository.findById(photoId)
+                .orElseThrow(() -> new IllegalArgumentException("Фотография не найдена."));
+
+        if (!photo.getSportFacility().getId().equals(facilityId)) {
+            throw new IllegalArgumentException("Фотография не принадлежит данной локации.");
+        }
+
+        minioService.deleteFile(photo.getFileKey());
+        photoRepository.delete(photo);
+    }
+
+    @Transactional
+    public void deleteFacilityPhotoByPath(Long facilityId, String filePath) {
+        SportFacility facility = getById(facilityId);
+        String username = authService.getCurrentUsername();
+
+        if (!facility.getCreatedBy().getUsername().equals(username)) {
+            throw new IllegalArgumentException("Вы не являетесь создателем этой локации.");
+        }
+
+        Photo photo = photoRepository.findByFileKey(filePath)
                 .orElseThrow(() -> new IllegalArgumentException("Фотография не найдена."));
 
         if (!photo.getSportFacility().getId().equals(facilityId)) {
