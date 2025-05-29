@@ -41,8 +41,8 @@ public class FacilityCommentController {
         return ResponseEntity.ok(responses);
     }
 
-    @Operation(summary = "Удаление комментария (ADMIN)")
-    @Secured("ROLE_ADMIN")
+    @Operation(summary = "Удаление комментария (USER)")
+    @Secured("ROLE_USER")
     @DeleteMapping("/{commentId}")
     public ResponseEntity<Void> delete(@PathVariable Long commentId) {
         commentService.delete(commentId);
