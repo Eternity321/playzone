@@ -1,5 +1,6 @@
 package com.playzone.service;
 
+import com.playzone.api.dto.mapper.UserMapper;
 import com.playzone.api.dto.request.JwtRequest;
 import com.playzone.api.dto.request.RegistrationUserRequest;
 import com.playzone.api.dto.response.JwtResponse;
@@ -16,6 +17,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -26,6 +28,7 @@ public class AuthService {
     private final UserService userService;
     private final JwtTokenUtils jwtTokenUtils;
     private final AuthenticationManager authenticationManager;
+    private final UserMapper userMapper;
 
     public ResponseEntity<?> createAuthToken(@RequestBody JwtRequest authRequest) {
         try {
@@ -49,7 +52,7 @@ public class AuthService {
             return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), "Пользователь с таким email уже существует"), HttpStatus.BAD_REQUEST);
         }
         User newUser = userService.createNewUser(registrationUserRequest);
-        UserResponse userResponse = new UserResponse(newUser.getId(), newUser.getUsername(), null, newUser.getEmail(), newUser.getNickname());
+        UserResponse userResponse = userMapper.toResponse(newUser);
         return ResponseEntity.ok(userResponse);
     }
 

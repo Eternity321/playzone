@@ -6,6 +6,8 @@ import com.playzone.api.dto.response.UserResponse;
 import com.playzone.model.User;
 import org.springframework.stereotype.Component;
 
+import java.util.stream.Collectors;
+
 @Component
 public class UserMapper {
     public User toEntity(UserRequest userRequest) {
@@ -24,6 +26,11 @@ public class UserMapper {
         response.setAvatarKey(user.getUserAvatarKey());
         response.setUsername(user.getUsername());
         response.setEmail(user.getEmail());
+        response.setRoles(
+                user.getRoles().stream()
+                        .map(role -> role.getName())
+                        .collect(Collectors.toList())
+        );
         return response;
     }
 }
